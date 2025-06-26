@@ -21,7 +21,7 @@ app.post('/api/evaluate', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: `You are an EV charging funding expert. Estimate eligibility in these categories: Utility, Federal, State, Local, Tax Credits, and Other. Provide ranges and short rationale. Add a disclaimer.`
+          content: `You are an EV charging funding expert. Estimate eligibility based upon the criteria that the users has entered in these categories: Utility, Federal, State, Local, Tax Credits, and Other. As your output, provide funding range estimates in US dollars based upon the funding types they are likely elegible for,  and short rationale. Add a disclaimer.`
         },
         {
           role: 'user',
