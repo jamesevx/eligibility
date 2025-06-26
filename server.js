@@ -16,7 +16,6 @@ app.use(express.json());
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SERP_API_KEY = process.env.SERP_API_KEY;
 
-// Build search query using both address and utility
 async function searchFundingPrograms(address, utility) {
   const query = `What EV charging rebates or incentives are available at "${address}" the utility company is "${utility}"`;
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
@@ -24,9 +23,7 @@ async function searchFundingPrograms(address, utility) {
   try {
     const res = await axios.get(url);
     const results = res.data.organic_results || [];
-    return results
-      .map(result => result.link)
-      .slice(0, 5); // limit to top 5
+    return results.map(result => result.link).slice(0, 5);
   } catch (err) {
     console.error('Search failed:', err.message);
     return [];
@@ -58,17 +55,31 @@ app.post('/api/evaluate', async (req, res) => {
   const address = formData?.siteAddress || formData?.address || '';
   const utility = formData?.utilityProvider || formData?.utility || '';
 
-  const formattedInput = JSON.stringify(formData, null, 2);
+  const urls = await searchFundingPrograms(address, utility);
+  const texts = await Promise.all(urls.map(url => scrapePageText(url)));
+  const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
+
+  const projectSummary = `
+Project Summary:
+This is a commercial EV charging project located at "${address}" with utility provider "${utility}". The project includes ${formData.numChargers || 'multiple'} high-powered chargers (${formData.chargerKW || 'unknown'} kW) with ${formData.numPorts || 'multiple'} ports, configured for ${formData.publicAccess?.toLowerCase().includes('yes') ? 'public access' : 'private use'}. The site ${formData.disadvantagedCommunity?.toLowerCase() === 'yes' ? 'is' : 'is not'} located in a disadvantaged community (DAC).
+
+Customer-provided data:
+${JSON.stringify(formData, null, 2)}
+
+Please evaluate likely EV charging funding eligibility in all categories using this info and the search results below.
+
+Relevant Internet Findings:
+${webContent}
+`;
 
   try {
-    const urls = await searchFundingPrograms(address, utility);
-    const texts = await Promise.all(urls.map(url => scrapePageText(url)));
-    const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
-
-    const messages = [
-  {
-    role: 'system',
-    content: `
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      temperature: 0.4,
+      messages: [
+        {
+          role: 'system',
+          content: `
 You are an expert in EV charging incentives and rebates in the United States.
 
 Use the provided project details and any internet findings to identify likely applicable funding across:
@@ -81,39 +92,38 @@ Your goals:
 1. Estimate **realistic funding ranges in USD** for each category.
 2. Provide the **name of likely programs** when possible, even if inferred from utility/state.
 3. If program names are not found online, make a **logical best guess** based on location, charger type (e.g., DCFC vs Level 2), public access, site type (e.g., fleet, workplace), utility name, and DAC status.
-4. If the project qualifies for IRS 30C, include estimated tax credit value based on eligibility assumptions (e.g. prevailing wage). Also include in a seperate category any potential state tax incentives that the customer could be elegible for, try to find this information from the websearch.
+4. If the project qualifies for IRS 30C, include estimated tax credit value based on eligibility assumptions (e.g. prevailing wage). Also include in a separate category any potential state tax incentives the customer could be eligible for — try to find this information from the web search.
 5. Include **short rationales** per category for your estimates.
 6. Always end with a **disclaimer** that this is an estimate based on available information and assumptions.
 
 Return the response in this format:
 
-Utility: $X - $Y
+Utility: $X - $Y  
 - Rationale and possible program name
 
-Federal: $X - $Y
+Federal: $X - $Y  
 - Rationale and possible program name
 
-State: ...
+State: $X - $Y  
+- ...
 
-Local: ...
+Local: $X - $Y  
+- ...
 
-Tax Credits: ...
+Tax Credits: $X - $Y  
+- ...
 
-Other: ...
+Other: $X - $Y  
+- ...
 
-Disclaimer: ...`
-  },
-  {
-    role: 'user',
-    content: `Customer Project Details:\n${formattedInput}\n\nRelevant Internet Findings:\n${webContent}`
-  }
-];
-
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages,
-      temperature: 0.3
+Disclaimer: ...
+`
+        },
+        {
+          role: 'user',
+          content: projectSummary
+        }
+      ]
     });
 
     const responseText = completion.choices[0].message.content;
