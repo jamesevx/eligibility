@@ -6,7 +6,7 @@ import axios from 'axios';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const cheerio = require('cheerio');
-const pdf = require('pdf-parse'); // ✅ Add this
+const pdf = require('pdf-parse');
 
 config();
 const app = express();
@@ -16,8 +16,9 @@ app.use(express.json());
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SERP_API_KEY = process.env.SERP_API_KEY;
 
-async function searchFundingPrograms(address) {
-  const query = `EV charging rebates incentives site:.gov "${address}"`;
+// Build search query using both address and utility
+async function searchFundingPrograms(address, utility) {
+  const query = `EV charging rebates incentives "${address}" "${utility}"`;
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
 
   try {
@@ -53,12 +54,14 @@ async function scrapePageText(url) {
 
 app.post('/api/evaluate', async (req, res) => {
   const { formData } = req.body;
-  const address = formData.siteAddress || formData.address || '';
+
+  const address = formData?.siteAddress || formData?.address || '';
+  const utility = formData?.utilityProvider || formData?.utility || '';
 
   const userPrompt = `Project Info:\n${JSON.stringify(formData, null, 2)}\n\nEstimate eligibility.`;
 
   try {
-    const urls = await searchFundingPrograms(address);
+    const urls = await searchFundingPrograms(address, utility);
     const texts = await Promise.all(urls.map(url => scrapePageText(url)));
     const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
 
