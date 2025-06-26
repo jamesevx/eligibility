@@ -6,6 +6,7 @@ import axios from 'axios';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const cheerio = require('cheerio');
+const pdf = require('pdf-parse'); // ✅ Add this
 
 config();
 const app = express();
@@ -24,8 +25,7 @@ async function searchFundingPrograms(address) {
     const results = res.data.organic_results || [];
     return results
       .map(result => result.link)
-      .filter(link => !link.toLowerCase().endsWith('.pdf')) // skip PDFs
-      .slice(0, 3);
+      .slice(0, 5); // now includes both HTML and PDFs
   } catch (err) {
     console.error('Search failed:', err.message);
     return [];
@@ -34,9 +34,17 @@ async function searchFundingPrograms(address) {
 
 async function scrapePageText(url) {
   try {
-    const res = await axios.get(url, { timeout: 8000 });
-    const $ = cheerio.load(res.data);
-    return $('body').text().replace(/\s+/g, ' ').trim().slice(0, 4000);
+    if (url.toLowerCase().endsWith('.pdf')) {
+      console.log(`Scraping PDF: ${url}`);
+      const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 10000 });
+      const data = await pdf(res.data);
+      return data.text.replace(/\s+/g, ' ').trim().slice(0, 4000);
+    } else {
+      console.log(`Scraping HTML: ${url}`);
+      const res = await axios.get(url, { timeout: 8000 });
+      const $ = cheerio.load(res.data);
+      return $('body').text().replace(/\s+/g, ' ').trim().slice(0, 4000);
+    }
   } catch (err) {
     console.error(`Failed to scrape ${url}:`, err.message);
     return '';
