@@ -66,23 +66,49 @@ app.post('/api/evaluate', async (req, res) => {
     const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
 
     const messages = [
-      {
-        role: 'system',
-        content: `You are an EV charging funding expert.
+  {
+    role: 'system',
+    content: `
+You are an expert in EV charging incentives and rebates in the United States.
 
-Use the customer's inputs and supplemental web findings to estimate likely EV charging incentives and rebates.
+Use the provided project details and any internet findings to identify likely applicable funding across:
+- Utility programs
+- State and local programs
+- Federal funding and tax credits
+- Other relevant sources
 
-Provide:
-- Estimated funding **ranges in USD** per category: Utility, Federal, State, Local, Tax Credits, and Other.
-- **Program names or references** where possible.
-- A brief rationale for each estimate.
-- A disclaimer that this is an estimate, not a guarantee.`
-      },
-      {
-        role: 'user',
-        content: `Customer Project Details:\n${formattedInput}\n\nRelevant Internet Findings (address: "${address}", utility: "${utility}"):\n${webContent}`
-      }
-    ];
+Your goals:
+1. Estimate **realistic funding ranges in USD** for each category.
+2. Provide the **name of likely programs** when possible, even if inferred from utility/state.
+3. If program names are not found online, make a **logical best guess** based on location, charger type (e.g., DCFC vs Level 2), public access, site type (e.g., fleet, workplace), utility name, and DAC status.
+4. If the project qualifies for IRS 30C, include estimated tax credit value based on eligibility assumptions (e.g. prevailing wage). Also include in a seperate category any potential state tax incentives that the customer could be elegible for, try to find this information from the websearch.
+5. Include **short rationales** per category for your estimates.
+6. Always end with a **disclaimer** that this is an estimate based on available information and assumptions.
+
+Return the response in this format:
+
+Utility: $X - $Y
+- Rationale and possible program name
+
+Federal: $X - $Y
+- Rationale and possible program name
+
+State: ...
+
+Local: ...
+
+Tax Credits: ...
+
+Other: ...
+
+Disclaimer: ...`
+  },
+  {
+    role: 'user',
+    content: `Customer Project Details:\n${formattedInput}\n\nRelevant Internet Findings:\n${webContent}`
+  }
+];
+
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
