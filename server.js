@@ -1,7 +1,10 @@
+
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { OpenAI } from 'openai';
+import axios from 'axios';
+import cheerio from 'cheerio';
 
 config();
 const app = express();
@@ -9,23 +12,50 @@ app.use(cors());
 app.use(express.json());
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const SERP_API_KEY = process.env.SERP_API_KEY;
+
+async function searchFundingPrograms(address) {
+  const query = `EV charging rebates incentives site:.gov "${address}"`;
+  const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
+
+  const res = await axios.get(url);
+  const results = res.data.organic_results || [];
+
+  return results.map(result => result.link).slice(0, 3); // top 3 results
+}
+
+async function scrapePageText(url) {
+  try {
+    const res = await axios.get(url, { timeout: 8000 });
+    const $ = cheerio.load(res.data);
+    return $('body').text().replace(/\s+/g, ' ').trim().slice(0, 4000);
+  } catch (err) {
+    console.error(`Failed to scrape ${url}:`, err.message);
+    return '';
+  }
+}
 
 app.post('/api/evaluate', async (req, res) => {
   const { formData } = req.body;
+  const address = formData.siteAddress || formData.address || '';
 
   const userPrompt = `Project Info:\n${JSON.stringify(formData, null, 2)}\n\nEstimate eligibility.`;
 
   try {
+    const urls = await searchFundingPrograms(address);
+    const texts = await Promise.all(urls.map(url => scrapePageText(url)));
+    const webContent = texts.filter(Boolean).join('\n\n');
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content: `You are an EV charging funding expert. Estimate eligibility based upon the criteria that the users has entered in these categories: Utility, Federal, State, Local, Tax Credits, and Other. As your output, provide funding range estimates in US dollars based upon the funding types they are likely elegible for,  and short rationale. Add a disclaimer.`
+          content: 'You are an EV charging funding expert. Based on the project info and supplemental internet results, estimate eligibility in the following categories: Utility, Federal, State, Local, Tax Credits, and Other. Provide US$ funding ranges and a short rationale. Include a disclaimer.'
         },
         {
           role: 'user',
-          content: userPrompt
+          content: `${userPrompt}\n\nRelevant Internet Findings:\n${webContent}`
         }
       ],
       temperature: 0.3
@@ -40,8 +70,6 @@ app.post('/api/evaluate', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
-//app.listen(3001, () => console.log('API running on http://localhost:3001'));
