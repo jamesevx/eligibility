@@ -1,10 +1,11 @@
-
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { OpenAI } from 'openai';
 import axios from 'axios';
 import { createRequire } from 'module';
+import https from 'https';
+
 const require = createRequire(import.meta.url);
 const cheerio = require('cheerio');
 
@@ -16,21 +17,33 @@ app.use(express.json());
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SERP_API_KEY = process.env.SERP_API_KEY;
 
+// Axios instance that ignores invalid SSL certificates
+const axiosInstance = axios.create({
+  httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+  timeout: 8000
+});
+
 async function searchFundingPrograms(address) {
   const query = `EV charging rebates incentives site:.gov "${address}"`;
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
 
-  const res = await axios.get(url);
+  const res = await axiosInstance.get(url);
   const results = res.data.organic_results || [];
 
-  return results.map(result => result.link).slice(0, 3); // top 3 results
+  return results.map(result => result.link).slice(0, 3);
 }
 
 async function scrapePageText(url) {
   try {
-    const res = await axios.get(url, { timeout: 8000 });
+    if (url.endsWith('.pdf')) {
+      console.warn('Skipping PDF:', url);
+      return '[PDF link skipped: not supported for scraping]';
+    }
+
+    const res = await axiosInstance.get(url);
     const $ = cheerio.load(res.data);
-    return $('body').text().replace(/\s+/g, ' ').trim().slice(0, 4000);
+    const text = $('body').text().replace(/\s+/g, ' ').trim();
+    return text.slice(0, 4000); // limit to 4000 chars
   } catch (err) {
     console.error(`Failed to scrape ${url}:`, err.message);
     return '';
