@@ -26,7 +26,7 @@ async function searchFundingPrograms(address, utility) {
     const results = res.data.organic_results || [];
     return results
       .map(result => result.link)
-      .slice(0, 5); // now includes both HTML and PDFs
+      .slice(0, 5); // limit to top 5
   } catch (err) {
     console.error('Search failed:', err.message);
     return [];
@@ -58,25 +58,35 @@ app.post('/api/evaluate', async (req, res) => {
   const address = formData?.siteAddress || formData?.address || '';
   const utility = formData?.utilityProvider || formData?.utility || '';
 
-  const userPrompt = `Project Info:\n${JSON.stringify(formData, null, 2)}\n\nEstimate eligibility.`;
+  const formattedInput = JSON.stringify(formData, null, 2);
 
   try {
     const urls = await searchFundingPrograms(address, utility);
     const texts = await Promise.all(urls.map(url => scrapePageText(url)));
     const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
 
+    const messages = [
+      {
+        role: 'system',
+        content: `You are an EV charging funding expert.
+
+Use the customer's inputs and supplemental web findings to estimate likely EV charging incentives and rebates.
+
+Provide:
+- Estimated funding **ranges in USD** per category: Utility, Federal, State, Local, Tax Credits, and Other.
+- **Program names or references** where possible.
+- A brief rationale for each estimate.
+- A disclaimer that this is an estimate, not a guarantee.`
+      },
+      {
+        role: 'user',
+        content: `Customer Project Details:\n${formattedInput}\n\nRelevant Internet Findings (address: "${address}", utility: "${utility}"):\n${webContent}`
+      }
+    ];
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an EV charging funding expert. Based on the project info and supplemental internet results, estimate eligibility in the following categories: Utility, Federal, State, Local, Tax Credits, and Other. Provide US$ funding ranges and a short rationale. Include a disclaimer.'
-        },
-        {
-          role: 'user',
-          content: `${userPrompt}\n\nRelevant Internet Findings:\n${webContent}`
-        }
-      ],
+      messages,
       temperature: 0.3
     });
 
