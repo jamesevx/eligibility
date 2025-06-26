@@ -4,7 +4,9 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import { OpenAI } from 'openai';
 import axios from 'axios';
-import cheerio from 'cheerio';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const cheerio = require('cheerio');
 
 config();
 const app = express();
