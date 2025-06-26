@@ -18,7 +18,7 @@ const SERP_API_KEY = process.env.SERP_API_KEY;
 
 // Build search query using both address and utility
 async function searchFundingPrograms(address, utility) {
-  const query = `EV charging rebates incentives "${address}" "${utility}"`;
+  const query = `What EV charging rebates or incentives are available at "${address}" the utility company is "${utility}"`;
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
 
   try {
