@@ -1,14 +1,9 @@
+// Updated server.js using OpenAI web_search_preview tool
+
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { OpenAI } from 'openai';
-import axios from 'axios';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const cheerio = require('cheerio');
-const pdf = require('pdf-parse');
-import iconv from 'iconv-lite';
-import { JSDOM } from 'jsdom';
 
 config();
 const app = express();
@@ -16,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const SERP_API_KEY = process.env.SERP_API_KEY;
 
 // Extract US state from address
 function extractState(address = '') {
@@ -57,144 +51,23 @@ function formatProjectDescription(formData) {
 This EV charging project is located at ${siteAddress || 'an unspecified address'} and is served by utility ${utilityProvider || 'unknown'}.
 The project includes ${chargerStr} ${portStr}.
 It is intended for ${usageType || 'general'} use and provides ${publicAccess || 'unknown'} access to the public.
-${dacStr}
-`.trim();
+${dacStr}`.trim();
 }
 
-// Custom search query builder
-function buildSearchQueries(formData) {
-  const state = extractState(formData.siteAddress);
-  const usage = formData.usageType || '';
-  const chargerType = formData.chargerType || '';
-  const utility = formData.utilityProvider || '';
-
-  const queries = [];
-
-  if (usage && utility && state) {
-    queries.push(`"${usage}" EV charging rebates "${utility}" "${state}"`);
-  }
-  if (state && chargerType) {
-    queries.push(`"${state}" EV charging rebates "${chargerType}"`);
-  }
-  if (state && usage) {
-    queries.push(`"${state}" EV charging rebates "${usage}"`);
-  }
-  if (state) {
-    queries.push(`"${state}" EV charging tax credits`);
-  }
-
-  queries.push(`IRS30C Tax Credit`);
-  return queries;
-}
-
-// Helper to extract visible HTML body text
-function extractVisibleText(html) {
-  const dom = new JSDOM(html);
-  const document = dom.window.document;
-
-  ['script', 'style', 'nav', 'footer', 'noscript', 'iframe', 'svg', 'canvas', 'link', 'meta'].forEach(tag => {
-    document.querySelectorAll(tag).forEach(el => el.remove());
-  });
-
-  return document.body.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000);
-}
-
-// Scrape HTML or PDF page content
-async function scrapePageText(url) {
-  if (!url || !url.startsWith('http')) {
-    console.warn(`Skipping invalid URL: ${url}`);
-    return '';
-  }
-
-  const headers = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-  'Accept-Language': 'en-US,en;q=0.9',
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-  'Connection': 'keep-alive',
-  'Upgrade-Insecure-Requests': '1',
-  'Referer': 'https://www.google.com/',
-  'Origin': 'https://www.google.com'
-  };
-
-  try {
-    if (url.toLowerCase().endsWith('.pdf')) {
-      const res = await axios.get(url, {
-        responseType: 'arraybuffer',
-        timeout: 15000,
-        headers
-      });
-      const data = await pdf(res.data);
-      return data.text.replace(/\s+/g, ' ').trim().slice(0, 4000);
-    } else {
-      const res = await axios.get(url, {
-        responseType: 'arraybuffer',
-        timeout: 15000,
-        headers,
-        maxRedirects: 5
-      });
-
-      const contentType = res.headers['content-type'] || '';
-      const charsetMatch = contentType.match(/charset=([^;]+)/i);
-      const encoding = charsetMatch ? charsetMatch[1] : 'utf-8';
-      const decoded = iconv.decode(res.data, encoding);
-
-      return extractVisibleText(decoded);
-    }
-  } catch (err) {
-    console.error(`Failed to scrape ${url}:`, err.message);
-    return '';
-  }
-}
-
-// SERP API search
-async function searchFundingPrograms(queries) {
-  const allLinks = new Set();
-  const fetches = queries.map(async (query) => {
-    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
-    try {
-      const res = await axios.get(url);
-      const results = res.data.organic_results || [];
-      results.forEach(result => allLinks.add(result.link));
-    } catch (err) {
-      console.error(`Search failed for query "${query}":`, err.message);
-    }
-  });
-
-  await Promise.all(fetches);
-  return [...allLinks].slice(0, 8); // Limit to top 8
-}
-
-// Main API endpoint
+// Main API endpoint using OpenAI's web_search_preview tool
 app.post('/api/evaluate', async (req, res) => {
   const { formData } = req.body;
-
-  const searchQueries = buildSearchQueries(formData);
-  const urls = await searchFundingPrograms(searchQueries);
-  const texts = await Promise.all(urls.map(url => scrapePageText(url)));
-  const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
-
   const formattedInput = formatProjectDescription(formData);
 
-  const messages = [
-    {
-      role: 'system',
-      content: `
-You are a clean energy funding consultant. Your task is to:
-1. Carefully read the customer’s EV charging project details.
-2. Carefully review relevant internet content (HTML/PDF).
-3. **Cross-reference** both to identify any clearly matching rebate values, tax credit percentages, or funding limits.
+  try {
+    const response = await openai.responses.create({
+      model: 'gpt-4.1',
+      tools: [{ type: 'web_search_preview' }],
+      input: `Estimate available EV charging incentives for the following project:
 
-Your analysis must:
-- Identify **charger quantity, kW rating**, and **port count/output**
-- Check if internet findings mention per-kW, per-port, or per-charger incentives
-- Also check if the internet findings and the per port calculations mention other criteria like DAC, project type (commercial, multifamily, etc.)
-- Estimate **total potential funding** by matching that to the customer's project size
+${formattedInput}
 
-Example: If internet content says “$68,750 per 240 kW port”, and customer has 6 ports at 240 kW, then total utility incentive = 6 × $68,750
-
-Also consider DAC status, public access, utility name, and use case.
-
-Structure your output:
+Please categorize funding into:
 - Federal Tax Credits
 - State Tax Credits
 - State Funding
@@ -202,28 +75,12 @@ Structure your output:
 - Local/Regional Programs
 - Private/Other Incentives
 
-For these outputs structure them like the following:
-Utility: $240k-300k
-*explanation of reasoning
-
-Always explain your assumptions, match logic, and note any missing data.
-End with a disclaimer.`
-    },
-    {
-      role: 'user',
-      content: `Customer Project Details:\n${formattedInput}\n\nRelevant Internet Findings:\n${webContent}`
-    }
-  ];
-
-  try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo',
-      messages,
-      temperature: 0.3
+Provide approximate dollar amounts, justification, and source citations where possible.`
     });
 
-    const responseText = completion.choices[0].message.content;
-    res.json({ result: responseText });
+    const messageItem = response.choices.find(item => item.type === 'message');
+    const content = messageItem?.content?.[0]?.text || 'No response.';
+    res.json({ result: content });
   } catch (error) {
     console.error('OpenAI error:', error);
     res.status(500).json({ error: 'Failed to evaluate funding eligibility' });
