@@ -75,7 +75,11 @@ Please categorize funding into:
 - Local/Regional Programs
 - Private/Other Incentives
 
-Provide approximate dollar amounts, justification, and source citations where possible.`
+Provide approximate dollar amounts, justification, and source citations where possible.
+Format the output like this for example:
+Utility: $300k-400k
+*utility explanation/details:
+`
     });
 
     const messageItem = response.choices.find(item => item.type === 'message');
