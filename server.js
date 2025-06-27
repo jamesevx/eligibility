@@ -16,13 +16,50 @@ app.use(express.json());
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const SERP_API_KEY = process.env.SERP_API_KEY;
 
-// Simple helper to extract US state abbreviation from address
+// Extract US state from address
 function extractState(address = '') {
-  const stateMatch = address.match(/,\s*([A-Z]{2})\s*\d{5}/);
-  return stateMatch ? stateMatch[1] : '';
+  const match = address.match(/,\s*([A-Z]{2})\s*\d{5}/);
+  return match ? match[1] : '';
 }
 
-// Build custom search queries
+// Format form data into natural project description
+function formatProjectDescription(formData) {
+  const {
+    siteAddress,
+    utilityProvider,
+    numChargers,
+    chargerType,
+    chargerKW,
+    numPorts,
+    portKW,
+    publicAccess,
+    disadvantagedCommunity,
+    usageType
+  } = formData;
+
+  const chargerStr = numChargers && chargerKW
+    ? `${numChargers} ${chargerType || ''} chargers rated at ${chargerKW} kW each`
+    : '';
+
+  const portStr = numPorts && portKW
+    ? `with ${numPorts} ports delivering up to ${portKW} kW each`
+    : '';
+
+  const dacStr = disadvantagedCommunity === 'Yes'
+    ? `The site is located in a Disadvantaged Community.`
+    : disadvantagedCommunity === 'No'
+    ? `The site is not located in a Disadvantaged Community.`
+    : '';
+
+  return `
+This EV charging project is located at ${siteAddress || 'an unspecified address'} and is served by utility ${utilityProvider || 'unknown'}.
+The project includes ${chargerStr} ${portStr}.
+It is intended for ${usageType || 'general'} use and provides ${publicAccess || 'unknown'} access to the public.
+${dacStr}
+`.trim();
+}
+
+// Custom search query builder
 function buildSearchQueries(formData) {
   const state = extractState(formData.siteAddress);
   const usage = formData.usageType || '';
@@ -34,44 +71,21 @@ function buildSearchQueries(formData) {
   if (usage && utility && state) {
     queries.push(`"${usage}" EV charging rebates "${utility}" "${state}"`);
   }
-
   if (state && chargerType) {
     queries.push(`"${state}" EV charging rebates "${chargerType}"`);
   }
-
   if (state && usage) {
     queries.push(`"${state}" EV charging rebates "${usage}"`);
   }
-
   if (state) {
     queries.push(`"${state}" EV charging tax credits`);
   }
 
   queries.push(`IRS30C Tax Credit`);
-
   return queries;
 }
 
-// SERP API search
-async function searchFundingPrograms(queries) {
-  const allLinks = new Set();
-
-  const fetches = queries.map(async (query) => {
-    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
-    try {
-      const res = await axios.get(url);
-      const results = res.data.organic_results || [];
-      results.forEach(result => allLinks.add(result.link));
-    } catch (err) {
-      console.error(`Search failed for query "${query}":`, err.message);
-    }
-  });
-
-  await Promise.all(fetches);
-  return [...allLinks].slice(0, 8); // limit to top 8 links
-}
-
-// Scrape HTML or PDF
+// Scrape HTML or PDF page content
 async function scrapePageText(url) {
   try {
     if (url.toLowerCase().endsWith('.pdf')) {
@@ -89,7 +103,25 @@ async function scrapePageText(url) {
   }
 }
 
-// Main endpoint
+// SERP API search
+async function searchFundingPrograms(queries) {
+  const allLinks = new Set();
+  const fetches = queries.map(async (query) => {
+    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${SERP_API_KEY}&num=5`;
+    try {
+      const res = await axios.get(url);
+      const results = res.data.organic_results || [];
+      results.forEach(result => allLinks.add(result.link));
+    } catch (err) {
+      console.error(`Search failed for query "${query}":`, err.message);
+    }
+  });
+
+  await Promise.all(fetches);
+  return [...allLinks].slice(0, 8); // Limit to top 8
+}
+
+// Main API endpoint
 app.post('/api/evaluate', async (req, res) => {
   const { formData } = req.body;
 
@@ -98,48 +130,41 @@ app.post('/api/evaluate', async (req, res) => {
   const texts = await Promise.all(urls.map(url => scrapePageText(url)));
   const webContent = texts.filter(Boolean).join('\n\n') || 'No relevant web content found.';
 
-  const formattedInput = JSON.stringify(formData, null, 2);
+  const formattedInput = formatProjectDescription(formData);
 
   const messages = [
     {
       role: 'system',
       content: `
-You are a highly paid, expert-level clean energy funding consultant with access to real-time search via the SERP API. Your role is to assess a single EV charging project site and provide a clear, accurate, and thorough one-page summary of **all potential funding opportunities** available to that project.
+You are a clean energy funding consultant. Your task is to:
+1. Carefully read the customer’s EV charging project details.
+2. Carefully review relevant internet content (HTML/PDF).
+3. **Cross-reference** both to identify any clearly matching rebate values, tax credit percentages, or funding limits.
 
-You will be given a complete project input from the user filling the form including (but not limited to):
-- Site address
-- Number and type of chargers (e.g., 7 Level 2, 19.2 kW)
-- Use case (e.g., commercial, multifamily, workplace, office, government/municipal,fleet)
-- And additional information
+Your analysis must:
+- Identify **charger quantity, kW rating**, and **port count/output**
+- Check if internet findings mention per-kW, per-port, or per-charger incentives
+- Also check if the internet findings and the per port calculations mention other criteria like DAC, project type (commercial, multifamily, etc.)
+- Estimate **total potential funding** by matching that to the customer's project size
 
-Your job is to identify **every applicable funding opportunity** based on this input while cross referencing the users input to the data scrapped from the SERP google searches.
-- Federal, state, and local government websites (*.gov)
-- Utility program pages
-- Verified clean energy nonprofits and foundations
+Example: If internet content says “$68,750 per 240 kW port”, and customer has 6 ports at 240 kW, then total utility incentive = 6 × $68,750
 
-You must cross reference all of the information that the user is inputting with the data scrapped from SERP. Using all of this information, estimate to the best of your accuracy, how much money the customer is potentially elegible for.
+Also consider DAC status, public access, utility name, and use case.
 
-Output must follow these formatting rules:
+Structure your output:
+- Federal Tax Credits
+- State Tax Credits
+- State Funding
+- Utility Incentives
+- Local/Regional Programs
+- Private/Other Incentives
 
-1. **Structure your response using the following 5 categories**:
-   - Federal Tax Credits
-   - State Tax Credits
-   - State Funding
-   - Utility Incentives
-   - Local/Regional Programs
-   - Private/Other Incentives (e.g., LCFC, private credits, etc.)
+For these outputs structure them like the following:
+Utility: $240k-300k
+*explanation of reasoning
 
-2. **For each category**, First give the funding estimate like this: "Utility: $200k-300k", then underneath that list the *type of potential funding* (e.g., rebate, voucher, tax credit) and indicate high-level eligibility **based on the provided site information**.
-
-3. **Never list or name specific programs**. Instead, describe the general eligibility and format of potential support, e.g.:
-   - “Up to $4,000 per Level 2 charger available through utility-backed make-ready programs”
-   - “May be eligible for tax credits up to 30% of installation cost based on site type”
-
-4. Do not speculate or assume any eligibility. If required data is missing, clearly state what is needed (e.g., “DAC status not confirmed – may affect eligibility for state multiplier incentives.”)
-
-5. **Do not claim exact funding amounts.** Use conservative language like “up to,” “as high as,” “estimated range,” or “per charger/per port.”
-
-6. The final report should be **concise, one-page maximum**, and written in clear, professional language appropriate for delivery to a client or executive stakeholder.
+Always explain your assumptions, match logic, and note any missing data.
+End with a disclaimer.`
 `
     },
     {
@@ -150,7 +175,7 @@ Output must follow these formatting rules:
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo',
+      model: 'gpt-4',
       messages,
       temperature: 0.3
     });
