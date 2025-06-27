@@ -73,10 +73,21 @@ Please categorize funding into:
 - Local/Regional Programs
 - Private/Other Incentives
 
+Your analysis must:
+- Identify **charger quantity, kW rating**, and **port count/output**
+- Check if internet findings mention per-kW, per-port, or per-charger incentives
+- Also check if the internet findings and the per port calculations mention other criteria like DAC, project type (commercial, multifamily, etc.)
+- Estimate **total potential funding** by matching all of the above information to the customer's project description
+
+For Example: If internet content says “$68,750 per 150 to 274 kW port”, and customer has 6 ports at 240 kW, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described.
+
+Also consider DAC status, public access, utility name, and use case.
+
 Provide approximate dollar amounts, justification, and source citations where possible.
+
 Format the output like this for example:
 Utility: $300k–400k
-*utility explanation/details:
+*Utility Funding explanation/details:
 `
     });
 
