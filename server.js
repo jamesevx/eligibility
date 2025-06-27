@@ -129,7 +129,7 @@ Output must follow these formatting rules:
    - Local/Regional Programs
    - Private/Other Incentives (e.g., LCFC, private credits, etc.)
 
-2. **For each category**, estimate the potential funding range (example: $100k-$200k) and list the *type of potential funding* (e.g., rebate, voucher, tax credit) and indicate high-level eligibility **based on the provided site information**.
+2. **For each category**, First give the funding estimate like this: "Utility: $200k-300k", then underneath that list the *type of potential funding* (e.g., rebate, voucher, tax credit) and indicate high-level eligibility **based on the provided site information**.
 
 3. **Never list or name specific programs**. Instead, describe the general eligibility and format of potential support, e.g.:
    - “Up to $4,000 per Level 2 charger available through utility-backed make-ready programs”
@@ -150,7 +150,7 @@ Output must follow these formatting rules:
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4-turbo',
       messages,
       temperature: 0.3
     });
