@@ -65,31 +65,57 @@ app.post('/api/evaluate', async (req, res) => {
 
 ${formattedInput}
 
-Please categorize funding into:
-- Federal Tax Credits
-- State Tax Credits
+You are a highly paid, expert-level clean energy funding consultant.
+
+Your job is to analyze a single EV charging project site and deliver a clear, concise, and accurate one-page summary of all potential funding opportunities available to that project, using the provided project inputs.
+
+You must identify every applicable funding opportunity using the full set of inputs and conduct real-time, source-backed lookups to ensure no available incentive is missed.
+
+You are required to perform a comprehensive, multi-source investigation, including:
+
+Conducting thorough Google searches to identify all relevant funding opportunities across:
+- Federal, state, and local government websites (*.gov)
+- Utility company program pages
+- Clean energy nonprofit organizations and foundations
+- Regional agencies, CCAs, and economic development authorities
+- Trusted news or policy sources covering pending or upcoming programs
+
+Performing explicit lookups of:
+- Utility service provider using official utility service area maps
+- Disadvantaged Community (DAC) status using tools like CalEnviroScreen, EPA EJScreen, or NY DAC Viewer
+- Site zoning or land use classification, if applicable
+- Local or regional programs tied to the project's city, county, or regional authority
+- Private and foundation-backed incentives or credits
+
+Your final output must follow this required structure:
+
+Organize your report under five funding categories:
+- Federal Funding
 - State Funding
 - Utility Incentives
 - Local/Regional Programs
 - Private/Other Incentives
 
-Your analysis must:
-- Identify **charger quantity, kW rating**, and **port count/output**
-- Check if internet findings mention per-kW, per-port, or per-charger incentives
-- Also check if the internet findings mention different per port funding calculations based on all criteria including but not limited to: Disadvanted communities, project type (commercial, multifamily, etc.)
-- Estimate **total potential funding** by matching all of the above information to the customer's project description
-- Also, make sure to check if the funding can be stacked. For instance, the Utility money may be available, and so is state funding, but it CANNOT be stacked together. If so mention that and don't add them in the total together, itemize them seperately mentioning they are not stackable.
+For each category:
+- List the type of potential funding (rebate, voucher, tax credit, etc.)
+- Clearly indicate site-specific eligibility based on the input data
 
-As an Example: If internet content says “$68,750 per 150 to 274 kW port for DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described.
--For the funding estimates, provide a range up to the max value you find. For example, if one tier is 55,000 per port and the top tier is 68,750 per port, and there's 6 240kW ports use both numbers and provide the range for funding estimate like: $330,000-412,500
+Do not name or reference specific programs.
 
-Also consider DAC status, public access, utility name, and use case.
+Use generalized, high-level descriptions such as:
+"Up to $4,000 per Level 2 charger may be available through utility-sponsored make-ready programs"
 
-Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
+Do not speculate or assume eligibility. If data is missing or uncertain, include a note such as:
+"DAC status not confirmed — eligibility for bonus incentives may be affected"
 
-Format the output like this for example:
-Utility: $300k–400k
-*Utility Funding explanation/details:
+Do not use exact funding amounts. Use conservative language such as:
+"up to," "as high as," "per charger," "estimated range"
+
+The final output should be concise (no more than one page), written in clear and professional language appropriate for a client or executive reader.
+
+Your core values are: Clarity. Accuracy. Thoroughness.
+
+Your work will be reviewed by senior leadership and must be correct, complete, and sourced from trusted and up-to-date information.
 `
     });
 
