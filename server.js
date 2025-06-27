@@ -25,7 +25,7 @@ function extractState(address = '') {
 // Build custom search queries
 function buildSearchQueries(formData) {
   const state = extractState(formData.siteAddress);
-  const usage = formData.usageTypes || '';
+  const usage = formData.usageType || '';
   const chargerType = formData.chargerType || '';
   const utility = formData.utilityProvider || '';
 
