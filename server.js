@@ -7,6 +7,8 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const cheerio = require('cheerio');
 const pdf = require('pdf-parse');
+import iconv from 'iconv-lite';
+import { JSDOM } from 'jsdom';
 
 config();
 const app = express();
@@ -85,17 +87,53 @@ function buildSearchQueries(formData) {
   return queries;
 }
 
+// Helper to extract visible HTML body text
+function extractVisibleText(html) {
+  const dom = new JSDOM(html);
+  const document = dom.window.document;
+
+  ['script', 'style', 'nav', 'footer', 'noscript', 'iframe', 'svg', 'canvas', 'link', 'meta'].forEach(tag => {
+    document.querySelectorAll(tag).forEach(el => el.remove());
+  });
+
+  return document.body.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000);
+}
+
 // Scrape HTML or PDF page content
 async function scrapePageText(url) {
+  if (!url || !url.startsWith('http')) {
+    console.warn(`Skipping invalid URL: ${url}`);
+    return '';
+  }
+
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9'
+  };
+
   try {
     if (url.toLowerCase().endsWith('.pdf')) {
-      const res = await axios.get(url, { responseType: 'arraybuffer', timeout: 10000 });
+      const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 15000,
+        headers
+      });
       const data = await pdf(res.data);
       return data.text.replace(/\s+/g, ' ').trim().slice(0, 4000);
     } else {
-      const res = await axios.get(url, { timeout: 8000 });
-      const $ = cheerio.load(res.data);
-      return $('body').text().replace(/\s+/g, ' ').trim().slice(0, 4000);
+      const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        timeout: 15000,
+        headers,
+        maxRedirects: 5
+      });
+
+      const contentType = res.headers['content-type'] || '';
+      const charsetMatch = contentType.match(/charset=([^;]+)/i);
+      const encoding = charsetMatch ? charsetMatch[1] : 'utf-8';
+      const decoded = iconv.decode(res.data, encoding);
+
+      return extractVisibleText(decoded);
     }
   } catch (err) {
     console.error(`Failed to scrape ${url}:`, err.message);
@@ -165,7 +203,6 @@ Utility: $240k-300k
 
 Always explain your assumptions, match logic, and note any missing data.
 End with a disclaimer.`
-
     },
     {
       role: 'user',
