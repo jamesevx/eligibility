@@ -66,7 +66,7 @@ app.post('/api/evaluate', async (req, res) => {
 ${formattedInput}
 
 Please categorize funding into:
-- Federal Tax Credits
+- Federal Tax Credits (Look up information on IRS 30C)
 - State Tax Credits
 - State Funding
 - Utility Incentives
@@ -79,14 +79,15 @@ Your analysis must:
 - Also check if the internet findings mention different per port funding calculations based on all criteria including but not limited to: Disadvanted communities, project type (commercial, multifamily, etc.)
 - Estimate **total potential funding** by matching all of the above information to the customer's project description
 - Also, make sure to check if the funding can be stacked. For instance, the Utility money may be available, and so is state funding, but it CANNOT be stacked together. If so mention that and don't add them in the total together, itemize them seperately mentioning they are not stackable.
+- Do NOT count Nevi funding as the project has been paused, do not mention it or factor it in
 
-As an Example: If internet content says “$68,750 per 150 to 274 kW port for DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories by showing an estimated range of funding.
+As an Example: If internet content says “$68,750 per 150 to 274 kW port for DAC projects & $55,000 per 150 to 274 kW ports for NON DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories by showing an estimated range of funding.
 
-Also consider DAC status, public access, utility name, and use case.
+In each category make sure to consider DAC status, public access, utility name, and use case.
 
 Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
 
-Format the output like this for example:
+Format each of the Funding Categgory outputs like this :
 Utility: $300k–400k
 *Utility Funding explanation/details:
 `
