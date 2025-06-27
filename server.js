@@ -25,7 +25,7 @@ function extractState(address = '') {
 // Build custom search queries
 function buildSearchQueries(formData) {
   const state = extractState(formData.siteAddress);
-  const usage = (formData.usageTypes || []).join(', ');
+  const usage = formData.usageTypes || '';
   const chargerType = formData.chargerType || '';
   const utility = formData.utilityProvider || '';
 
@@ -106,14 +106,40 @@ app.post('/api/evaluate', async (req, res) => {
       content: `
 You are a highly paid, expert-level clean energy funding consultant with access to real-time search via the SERP API. Your role is to assess a single EV charging project site and provide a clear, accurate, and thorough one-page summary of **all potential funding opportunities** available to that project.
 
-You must return a one-page report with sections for:
-- Federal Funding
-- State Funding
-- Utility Incentives
-- Local/Regional Programs
-- Private/Other Incentives
+You will be given a complete project input from the user filling the form including (but not limited to):
+- Site address
+- Number and type of chargers (e.g., 7 Level 2, 19.2 kW)
+- Use case (e.g., commercial, multifamily, workplace, office, government/municipal,fleet)
+- And additional information
 
-Only describe general program eligibility (e.g. “Up to $4,000 per L2 charger through utility rebate”). Do not name specific programs. Include a disclaimer.
+Your job is to identify **every applicable funding opportunity** based on this input while cross referencing the users input to the data scrapped from the SERP google searches.
+- Federal, state, and local government websites (*.gov)
+- Utility program pages
+- Verified clean energy nonprofits and foundations
+
+You must cross reference all of the information that the user is inputting with the data scrapped from SERP. Using all of this information, estimate to the best of your accuracy, how much money the customer is potentially elegible for.
+
+Output must follow these formatting rules:
+
+1. **Structure your response using the following 5 categories**:
+   - Federal Tax Credits
+   - State Tax Credits
+   - State Funding
+   - Utility Incentives
+   - Local/Regional Programs
+   - Private/Other Incentives (e.g., LCFC, private credits, etc.)
+
+2. **For each category**, estimate the potential funding range (example: $100k-$200k) and list the *type of potential funding* (e.g., rebate, voucher, tax credit) and indicate high-level eligibility **based on the provided site information**.
+
+3. **Never list or name specific programs**. Instead, describe the general eligibility and format of potential support, e.g.:
+   - “Up to $4,000 per Level 2 charger available through utility-backed make-ready programs”
+   - “May be eligible for tax credits up to 30% of installation cost based on site type”
+
+4. Do not speculate or assume any eligibility. If required data is missing, clearly state what is needed (e.g., “DAC status not confirmed – may affect eligibility for state multiplier incentives.”)
+
+5. **Do not claim exact funding amounts.** Use conservative language like “up to,” “as high as,” “estimated range,” or “per charger/per port.”
+
+6. The final report should be **concise, one-page maximum**, and written in clear, professional language appropriate for delivery to a client or executive stakeholder.
 `
     },
     {
