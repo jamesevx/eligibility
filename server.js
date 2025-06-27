@@ -80,9 +80,15 @@ Utility: $300k–400k
 `
     });
 
-    // ✅ FIX: Correctly parse the `responses.create()` array response
-    const messageItem = response.find(item => item.type === 'message');
-    const content = messageItem?.content?.[0]?.text || 'No response.';
+    // ✅ FIX: Properly extract assistant message from OpenAI response
+    let content = 'No response.';
+    if (response && Array.isArray(response.output)) {
+      const messageItem = response.output.find(item => item.type === 'message');
+      if (messageItem?.content?.[0]?.text) {
+        content = messageItem.content[0].text;
+      }
+    }
+
     res.json({ result: content });
 
   } catch (error) {
