@@ -1,5 +1,3 @@
-// Updated server.js using OpenAI web_search_preview tool
-
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
@@ -77,14 +75,16 @@ Please categorize funding into:
 
 Provide approximate dollar amounts, justification, and source citations where possible.
 Format the output like this for example:
-Utility: $300k-400k
+Utility: $300k–400k
 *utility explanation/details:
 `
     });
 
-    const messageItem = response.choices.find(item => item.type === 'message');
+    // ✅ FIX: Correctly parse the `responses.create()` array response
+    const messageItem = response.find(item => item.type === 'message');
     const content = messageItem?.content?.[0]?.text || 'No response.';
     res.json({ result: content });
+
   } catch (error) {
     console.error('OpenAI error:', error);
     res.status(500).json({ error: 'Failed to evaluate funding eligibility' });
