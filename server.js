@@ -76,12 +76,14 @@ Please categorize funding into:
 Your analysis must:
 - Identify **charger quantity, kW rating**, and **port count/output**
 - Check if internet findings mention per-kW, per-port, or per-charger incentives
-- Also check if the internet findings mention different per port funding calculations based on all criteria including but not limited to: Disadvanted communities, project type (commercial, multifamily, etc.)
+- Also check if the internet findings mention different per port funding calculations based on all criteria including but not limited to: Disadvantaged communities, project type (commercial, multifamily, etc.)
 - Estimate **total potential funding** by matching all of the above information to the customer's project description
-- Also, make sure to check if the funding can be stacked. For instance, the Utility money may be available, and so is state funding, but it CANNOT be stacked together. If so mention that and don't add them in the total together, itemize them seperately mentioning they are not stackable.
+- Also, make sure to check if the funding can be stacked. For instance, the Utility money may be available, and so is state funding, but it CANNOT be stacked together. If so mention that and don't add them in the total together, itemize them separately mentioning they are not stackable.
 - Do NOT count Nevi funding as the project has been paused, do not mention it or factor it in
 
-As an Example: If internet content says “$68,750 per 150 to 274 kW port for DAC projects & $55,000 per 150 to 274 kW ports for NON DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories by showing an estimated range of funding.
+As an Example: If internet content for utility funding “$68,750 per 150 to 274 kW port for DAC projects & $55,000 per 150 to 274 kW ports for NON DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories (EXCEPT for federal tax  credit funding) by showing an estimated range of funding.
+
+For Federal we DO NOT want to show a range. We do not know the exact project cost based on the user input. So instead list out the IRS30C tax credit benefits (ex: 30% of project costs capped at $100,000 per charger). Include a disclaimer about needing to meet prevailing wage and apprenticeship requirements and that to be eligible they need to check if they’re in a census tract. As a bonus, if you’re able to, navigate through the US census track website and check if their address is in an eligible census track: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experience/?id=dfcab6665ce74efe8cf257aab47ebee1
 
 In each category make sure to consider DAC status, public access, utility name, and use case.
 
