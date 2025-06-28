@@ -92,6 +92,8 @@ Provide approximate dollar amount ranges (100-200k), justification, and source c
 Format each of the Funding Categgory outputs like this :
 Utility: $300k–400k
 *Utility Funding explanation/details:
+
+Once you've listed out all of the categories of funding, show a summary of all incentive funding options.
 `
     });
 
