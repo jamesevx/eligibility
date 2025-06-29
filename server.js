@@ -60,7 +60,7 @@ app.post('/api/evaluate', async (req, res) => {
   try {
     const response = await openai.responses.create({
       model: 'o3-deep-research-2025-06-26',
-      tools: [{ type: 'web_search_preview', search_context_size: "high"}],
+      tools: [{ type: 'web_search_preview', search_context_size: "medium"}],
       input: `Estimate available EV charging incentives for the following project:
 
 ${formattedInput}
