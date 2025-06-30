@@ -65,52 +65,108 @@ app.post('/api/evaluate', async (req, res) => {
 
 ${formattedInput}
 
-Make sure to add these phrases in your websearch:
+---
+
+## Web Search Instructions
+
+You must search for relevant EV charging incentives using the following phrases:
+
 - "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 - "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 
-For utility funding, only scrape web data found from on the official Utility provider website.
-For state funding, only scrape web data found on official .gov websites.
+Use **official utility websites** for utility funding information and **.gov websites** for state funding.
 
-Please categorize funding into:
-- Federal Tax Credits (Look up information on IRS 30C)
-- State Tax Credits
-- State Funding
-- Utility Incentives
-- Local/Regional Programs
-- Private/Other Incentives
+**Do NOT use unofficial blogs, PDFs, or vendor websites unless no official source is available.**
 
-Your analysis must:
-- Identify **charger quantity, kW rating**, and **port count/output**
-- Check if internet findings mention per-kW, per-port, or per-charger incentives
-- Also check if the internet findings mention different per port funding calculations based on all criteria including but not limited to: Disadvantaged communities, project type (commercial, multifamily, etc.)
-- Estimate **total potential funding** by matching all of the above information to the customer's project description
-- Also, make sure to check if the funding can be stacked. For instance, the Utility money may be available, and so is state funding, but it CANNOT be stacked together. If so mention that and don't add them in the total together, itemize them separately mentioning they are not stackable.
-- Do NOT count Nevi funding as the project has been paused, do not mention it or factor it in
+---
 
-As an Example: If internet content for utility funding “$68,750 per 150 to 274 kW port for DAC projects & $55,000 per 150 to 274 kW ports for NON DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories (EXCEPT for federal tax  credit funding) by showing an estimated range of funding.
+## Evaluation Criteria
 
-For all funding estimates make sure you are calculating the funding estimates using the per port or per charger funding amounts multiplied by the site information the customer gave you. Make sure you are using the correct per port funding figures from the utility by comparing to the formatProjectDescription information given by the customer. so if the information the customer puts in says the site will be outputting 100 kW per port, make sure it falls in that utility funding range when calculating the estimate.
+You must categorize the incentives into the following groups:
 
-For Federal we DO NOT want to show a range. We do not know the exact project cost based on the user input. So instead list out the IRS30C tax credit benefits (ex: 30% of project costs capped at $100,000 per charger). Include a disclaimer about needing to meet prevailing wage and apprenticeship requirements and that to be eligible they need to check if they’re in a census tract. As a bonus, if you’re able to, navigate through the US census track website and check if their address is in an eligible census track: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experience/?id=dfcab6665ce74efe8cf257aab47ebee1
+1. **Federal Tax Credits** (e.g. IRS 30C)
+2. **State Tax Credits**
+3. **State Grants/Funding**
+4. **Utility Incentives**
+5. **Local or Regional Programs**
+6. **Private or Other Incentives**
 
-In each category make sure to consider DAC status, public access, utility name, and use case.
+---
 
-Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
+## Required Logic and Constraints
 
-For your output, Do the following:
+- Match incentives by:
+  - Number of chargers
+  - Charger kW rating
+  - Number of ports
+  - Port kW rating
+  - Public access
+  - DAC status
+  - Use case (e.g. fleet, public, multifamily)
 
-- Provide a brief summary of the project using formatProjectDescription.
-- Then summarize the funding in each category like this, shown below. For funding estimates display each funding estimate in a range like shown below:
-Utility: $300k–400k
-*Utility Funding explanation: Provide a brief summary of the utility funding details. DO NOT name the utility program or disclose critical program details. Mention whether the funding can be stacked with other programs and elegibility requirements for each funding type.
+- Use **exact multiplier math** when internet content provides:
+  - $ per port
+  - $ per charger
+  - $ per kW
 
-Once you've listed out all of the categories of funding, show a final summary of all incentive funding like this example below:
+  *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
+
+- If ranges exist (e.g., $55k–$68.75k), give a total funding range accordingly.
+
+---
+
+## Federal Tax Credit Rule
+
+- **Do NOT estimate a dollar amount.**
+- Instead, list IRS 30C rules: *30% of eligible costs, capped at $100,000 per charger.*
+- Include disclaimer: Prevailing wage + apprenticeship required.
+- Link to Census tool: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experience/?id=dfcab6665ce74efe8cf257aab47ebee1
+
+---
+
+## Stacking Rules
+
+- Identify whether any funding **cannot be combined** (e.g., state + utility).
+- Clearly state "Cannot be stacked" and **do not add them together** in totals.
+
+---
+
+## Output Format
+
+1. **Project Summary**  
+Use the project description (already formatted above).
+
+2. **Funding Estimates (with ranges):**
+
+Example format:
+
+**Utility:** $300,000–400,000  
+*Utility Funding explanation. Do not name the program. Note stackability and requirements.*
+
+**State:** $100,000  
+*State Funding explanation...*
+
+**Federal Tax Credits:** $0  
+*IRS 30C eligibility info here...*
+
+3. **Incentive Funding Summary**
+
+Example:
+
+
 
 Incentive Funding Summary:
 Utility: $300-$400k (Can be stacked)
 State: $100k (Cannot be stacked)
 Federal Tax Credits: $0
+
+
+---
+
+## Final Instruction
+
+Avoid hallucinations. If unsure or no information found, state “Unknown” or “Not found online.” Always include URLs in citations.
+
 `
     });
 
