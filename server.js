@@ -74,9 +74,18 @@ You must search for relevant EV charging incentives using the following phrases:
 - "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 - "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 
-ONLY USE INFORMATION FOUND ON **official utility websites** for utility funding information and **.gov websites** for state funding. MAKE SURE THE INFORMATION YOU ARE USING IS THE MOST UP TO DATE INFORMATION AVAILABLE ON THESE SITES.
 
-**DO NOT USE DATA OR INFORMATION PULLED OFF OF unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
+## Web Search Instructions (MANDATORY)
+
+For **utility incentive funding**, you MUST ONLY use data from the **official utility provider website** (e.g., coned.com, sce.com, psegli.net).  
+❌ DO NOT USE: 3rd-party aggregators, vendors, blogs, or PDFs unless the URL is clearly from the utility's own domain.  
+✅ ONLY ACCEPT information from the **utility's official website** for utility funding.  
+
+For **state-level funding**, only use URLs from **.gov** or official state program portals.
+
+If you cannot verify that a webpage is an official source (e.g., it does not end in `.gov` or belong to the utility domain), **do not use it** for funding data. Clearly state “Not Found on Official Site” instead of guessing.
+
+ NOT USE DATA OR INFORMATION PULLED OFF OF unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
 
 ---
 
@@ -155,19 +164,25 @@ Example format:
 
 Example:
 
-
-
 Incentive Funding Summary:
 Utility: $300-$400k (Can be stacked)
 State: $100k (Cannot be stacked)
 Federal Tax Credits: $0
 
-
 ---
 
 ## Final Instruction
 
-Avoid hallucinations. If unsure or no information found, state “Unknown” or “Not found online.” Always include URLs in citations.
+Double-check all web search results before using them. If a page is not from the **official utility or a .gov website**, it must not be used for funding estimates.
+
+If no official source is found, clearly state:
+- “No utility incentive funding found on [Utility Name] official website.”
+- “Not found on official .gov website for state incentives.”
+
+Always include a URL in your citations and state the domain name of the source used (e.g., "coned.com").
+
+Avoid hallucinations. NEVER assume funding details that are not explicitly stated on eligible sources.
+
 
 `
     });
