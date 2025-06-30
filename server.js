@@ -74,9 +74,9 @@ You must search for relevant EV charging incentives using the following phrases:
 - "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 - "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 
-Use **official utility websites** for utility funding information and **.gov websites** for state funding.
+ONLY USE INFORMATION FOUND ON **official utility websites** for utility funding information and **.gov websites** for state funding. MAKE SURE THE INFORMATION YOU ARE USING IS THE MOST UP TO DATE INFORMATION AVAILABLE ON THESE SITES.
 
-**Do NOT use unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
+**DO NOT USE DATA OR INFORMATION PULLED OFF OF unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
 
 ---
 
@@ -86,7 +86,7 @@ You must categorize the incentives into the following groups:
 
 1. **Federal Tax Credits** (e.g. IRS 30C)
 2. **State Tax Credits**
-3. **State Grants/Funding**
+3. **State Incentive Funding**
 4. **Utility Incentives**
 5. **Local or Regional Programs**
 6. **Private or Other Incentives**
@@ -97,6 +97,7 @@ You must categorize the incentives into the following groups:
 
 - Match incentives by:
   - Number of chargers
+  - Charger Type
   - Charger kW rating
   - Number of ports
   - Port kW rating
