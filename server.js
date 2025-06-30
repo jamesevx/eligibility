@@ -76,7 +76,7 @@ You must search for relevant EV charging incentives using the following phrases:
 
 Use **official utility websites** for utility funding information and **.gov websites** for state funding.
 
-**Do NOT use unofficial blogs, PDFs, or vendor websites unless no official source is available.**
+**Do NOT use unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
 
 ---
 
@@ -111,7 +111,8 @@ You must categorize the incentives into the following groups:
 
   *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
 
-- If ranges exist (e.g., $55k–$68.75k), give a total funding range accordingly.
+- If you are not 100% certain what funding amount the customer qualifies for, provide a funding rnage (e.g., $55k–$68.75k).
+- For each funding category, categorize the funding amounts by funding for available for charegrs or for makeready/infrastucture costs
 
 ---
 
