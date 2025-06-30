@@ -83,7 +83,7 @@ For **utility incentive funding**, you MUST ONLY use data from the **official ut
 
 For **state-level funding**, only use URLs from **.gov** or official state program portals.
 
-If you cannot verify that a webpage is an official source (e.g., it does not end in `.gov` or belong to the utility domain), **do not use it** for funding data. Clearly state “Not Found on Official Site” instead of guessing.
+If you cannot verify that a webpage is an official source (e.g., it does not end in .gov or belong to the utility domain), **do not use it** for funding data. Clearly state “Not Found on Official Site” instead of guessing.
 
  NOT USE DATA OR INFORMATION PULLED OFF OF unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
 
