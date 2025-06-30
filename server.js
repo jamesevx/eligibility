@@ -69,6 +69,9 @@ Make sure to add these phrases in your websearch:
 - "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 - "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 
+For utility funding, only scrape web data found from on the official Utility provider website.
+For state funding, only scrape web data found on official .gov websites.
+
 Please categorize funding into:
 - Federal Tax Credits (Look up information on IRS 30C)
 - State Tax Credits
@@ -94,8 +97,6 @@ For Federal we DO NOT want to show a range. We do not know the exact project cos
 In each category make sure to consider DAC status, public access, utility name, and use case.
 
 Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
-
-For Utility and state funding estimates, only quote figures you find from the official utility websites, and for state funding only quote numbers found on .gov websites. DO NOT INCLUDE OR USE FIGURES FOUND ON NON UTILITY/.GOV WEBSITES>
 
 For your output, Do the following:
 
