@@ -66,8 +66,8 @@ app.post('/api/evaluate', async (req, res) => {
 ${formattedInput}
 
 Make sure to add these phrases in your websearch:
-- "${formData.usageType} ${formData.utilityProvider} EV charger rebates in ${extractState(formData.siteAddress)}"
-- "${formData.usageType} EV charging incentives and rebates in ${extractState(formData.siteAddress)}"
+- "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
+- "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
 
 Please categorize funding into:
 - Federal Tax Credits (Look up information on IRS 30C)
