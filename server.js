@@ -93,10 +93,12 @@ In each category make sure to consider DAC status, public access, utility name, 
 
 Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
 
+For Utility and state funding estimates, you may use data from all websites. But for your official funding estimates, only use information that you scrape from .gov websites and the actual Utility website, do not quote numbers based on figures found on websites that are not from the Utiltiy or a .gov.
+
 For your output, Do the following:
 
 - Provide a brief summary of the project using formatProjectDescription.
-- Then summarize the funding in each category like this, shown below:
+- Then summarize the funding in each category like this, shown below. For funding estimates display each funding estimate in a range like shown below:
 Utility: $300k–400k
 *Utility Funding explanation: Provide a brief summary of the utility funding details. DO NOT name the utility program or disclose critical program details. Mention whether the funding can be stacked with other programs
 
