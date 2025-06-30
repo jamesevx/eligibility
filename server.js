@@ -87,20 +87,22 @@ Your analysis must:
 
 As an Example: If internet content for utility funding “$68,750 per 150 to 274 kW port for DAC projects & $55,000 per 150 to 274 kW ports for NON DAC projects”, and customer has 6 ports at 240 kW in a DAC, then total utility incentive = 6 × $68,750. Use this type of logic to formulate the estimating funding for each of the categories I've described. However, since we are not 100% certain that this is accurate, lets show an approximate range. So if tier below $68,750/port is 55,000/port, we show a utility funding range of $330k-412.5k. Use this same logic for all other funding categories (EXCEPT for federal tax  credit funding) by showing an estimated range of funding.
 
+For all funding estimates make sure you are calculating the funding estimates using the per port or per charger funding amounts multiplied by the site information the customer gave you.
+
 For Federal we DO NOT want to show a range. We do not know the exact project cost based on the user input. So instead list out the IRS30C tax credit benefits (ex: 30% of project costs capped at $100,000 per charger). Include a disclaimer about needing to meet prevailing wage and apprenticeship requirements and that to be eligible they need to check if they’re in a census tract. As a bonus, if you’re able to, navigate through the US census track website and check if their address is in an eligible census track: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experience/?id=dfcab6665ce74efe8cf257aab47ebee1
 
 In each category make sure to consider DAC status, public access, utility name, and use case.
 
 Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
 
-For Utility and state funding estimates, you may use data from all websites. But for your official funding estimates, only use information that you scrape from .gov websites and the actual Utility website, do not quote numbers based on figures found on websites that are not from the Utiltiy or a .gov.
+For Utility and state funding estimates, only quote figures you find from the official utility websites, and for state funding only quote numbers found on .gov websites. DO NOT INCLUDE OR USE FIGURES FOUND ON NON UTILITY/.GOV WEBSITES>
 
 For your output, Do the following:
 
 - Provide a brief summary of the project using formatProjectDescription.
 - Then summarize the funding in each category like this, shown below. For funding estimates display each funding estimate in a range like shown below:
 Utility: $300k–400k
-*Utility Funding explanation: Provide a brief summary of the utility funding details. DO NOT name the utility program or disclose critical program details. Mention whether the funding can be stacked with other programs
+*Utility Funding explanation: Provide a brief summary of the utility funding details. DO NOT name the utility program or disclose critical program details. Mention whether the funding can be stacked with other programs and elegibility requirements for each funding type.
 
 Once you've listed out all of the categories of funding, show a final summary of all incentive funding like this example below:
 
