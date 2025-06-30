@@ -89,11 +89,19 @@ In each category make sure to consider DAC status, public access, utility name, 
 
 Provide approximate dollar amount ranges (100-200k), justification, and source citations where possible.
 
-Format each of the Funding Categgory outputs like this :
-Utility: $300k–400k
-*Utility Funding explanation/details:
+For your output, Do the following:
 
-Once you've listed out all of the categories of funding, show a summary of all incentive funding options.
+- Provide a brief summary of the project using formatProjectDescription.
+- Then summarize the funding in each category like this, shown below:
+Utility: $300k–400k
+*Utility Funding explanation: Provide a brief summary of the utility funding details. DO NOT name the utility program or disclose critical program details. Mention whether the funding can be stacked with other programs
+
+Once you've listed out all of the categories of funding, show a final summary of all incentive funding like this example below:
+
+Incentive Funding Summary:
+Utility: $300-$400k (Can be stacked)
+State: $100k (Cannot be stacked)
+Federal Tax Credits: $0
 `
     });
 
