@@ -87,15 +87,12 @@ For **utility incentive funding**, you MUST ONLY use data from the **official ut
 
 ## State Incentive Rule (UPDATED)
 For state-level funding:
-- ✅ Prioritize .gov, state agency portals (e.g., nyserda.ny.gov), and trusted official sources.
+- ✅ Prioritize .gov and .org, state incentive sites (e.g., nyserda.ny.gov), and trusted official sources.
 - ⚠️ If no .gov source is found, you MAY use reputable nonprofit sites (e.g., caletc.org, cleancities.org, calevip.org).
 - ❌ Do NOT use blogs, random PDFs, or installer marketing pages.
 
-If no official or reputable source is found:
-- Clearly state: “State funding not found on official or trusted non-government source.”
-
 ## State Tax Credit Rule
-- ✅ Prioritize .gov and .org websites or state agency portals (e.g., www.tax.ny.gov), and trusted official sources.
+- ✅ Prioritize .gov and .org websites or state agency portals, for example www.tax.ny.gov, and other trusted sources.
 - ❌ Avoid using third party websites if you can.
 ---
 
@@ -171,7 +168,7 @@ Example format:
 **Federal Tax Credits:** $0  
 *IRS 30C eligibility info here...*
 
-**State Tax Credits:** $5000
+**State Tax Credits:** $5000 per port
 *State Tax Credit explanation*
 
 3. **Incentive Funding Summary**
