@@ -125,6 +125,16 @@ ELIGIBILITY CRITERIA TO MATCH
 - Networked vs non-networked
 - Zoning or transportation proximity (optional)
 
+- Use **exact multiplier math** when internet content provides:
+  - $ per port
+  - $ per charger
+  - $ per kW
+
+  *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
+
+- If you are not 100% certain what funding amount the customer qualifies for, provide a funding range (e.g., $55k–$68.75k).
+- For each funding category, categorize the funding amounts by funding available for chargers or for make-ready/infrastructure costs.
+
 ❗ Do not infer missing values. Instead, flag them in the final output under "Missing Information."
 
 ---
