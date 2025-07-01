@@ -64,7 +64,7 @@ app.post('/api/evaluate', async (req, res) => {
 
   try {
     const response = await openai.responses.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       temperature: 0.1,
       tools: [{ type: 'web_search_preview', search_context_size: "high"}],
       input: `Estimate available EV charging incentives for the following project:
