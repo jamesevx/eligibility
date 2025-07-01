@@ -85,7 +85,7 @@ For **utility incentive funding**, you MUST ONLY use data from the **official ut
 ❌ DO NOT USE: 3rd-party aggregators, vendors, blogs, or PDFs unless the URL is clearly from the utility's own domain.  
 ✅ ONLY ACCEPT information from the **utility's official website** for utility funding.  
 
-For **state-level funding**, only use URLs from **.gov** or official state program portals.
+For **state-level funding**, only use URLs from **.gov** or **.org** or official state program portals.
 
 ---
 
