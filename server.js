@@ -28,7 +28,8 @@ function formatProjectDescription(formData) {
     portKW,
     publicAccess,
     disadvantagedCommunity,
-    usageType
+    usageType,
+    vehicleType
   } = formData;
 
   const chargerStr = numChargers && chargerKW
@@ -45,11 +46,15 @@ function formatProjectDescription(formData) {
     ? `The site is not located in a Disadvantaged Community.`
     : '';
 
+  const vehicleStr = vehicleType
+    ? `The chargers will service ${vehicleType} vehicles.`
+    : '';
+
   return `
 This EV charging project is located at ${siteAddress || 'an unspecified address'} and is served by utility ${utilityProvider || 'unknown'}.
 The project includes ${chargerStr} ${portStr}.
 It is intended for ${usageType || 'general'} use and provides ${publicAccess || 'unknown'} access to the public.
-${dacStr}`.trim();
+${dacStr} ${vehicleStr}`.trim();
 }
 
 // Main API endpoint using OpenAI's web_search_preview tool
@@ -71,21 +76,16 @@ ${formattedInput}
 
 You must search for relevant EV charging incentives using the following phrases:
 
-- "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
+- "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} charging ${formData.vehicleType} in ${extractState(formData.siteAddress)}"
 - "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
-
 
 ## Web Search Instructions (MANDATORY)
 
-For **utility incentive funding**, you MUST ONLY use data from the **official utility provider website** (e.g., coned.com, sce.com, psegli.net).  
+For **utility incentive funding**, you MUST ONLY use data from the **official utility provider website** (e.g., coned.com, sce.com, psegli.com).  
 ❌ DO NOT USE: 3rd-party aggregators, vendors, blogs, or PDFs unless the URL is clearly from the utility's own domain.  
 ✅ ONLY ACCEPT information from the **utility's official website** for utility funding.  
 
 For **state-level funding**, only use URLs from **.gov** or official state program portals.
-
-If you cannot verify that a webpage is an official source (e.g., it does not end in .gov or belong to the utility domain), **do not use it** for funding data. Clearly state “Not Found on Official Site” instead of guessing.
-
- NOT USE DATA OR INFORMATION PULLED OFF OF unofficial blogs, PDFs, vendor websites, or third-party incentive websites.**
 
 ---
 
@@ -113,6 +113,7 @@ You must categorize the incentives into the following groups:
   - Public access
   - DAC status
   - Use case (e.g. fleet, public, multifamily)
+  - Vehicle type (light-duty vs medium or heavy duty)
 
 - Use **exact multiplier math** when internet content provides:
   - $ per port
@@ -121,8 +122,8 @@ You must categorize the incentives into the following groups:
 
   *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
 
-- If you are not 100% certain what funding amount the customer qualifies for, provide a funding rnage (e.g., $55k–$68.75k).
-- For each funding category, categorize the funding amounts by funding for available for charegrs or for makeready/infrastucture costs
+- If you are not 100% certain what funding amount the customer qualifies for, provide a funding range (e.g., $55k–$68.75k).
+- For each funding category, categorize the funding amounts by funding available for chargers or for make-ready/infrastructure costs.
 
 ---
 
@@ -164,9 +165,9 @@ Example format:
 
 Example:
 
-Incentive Funding Summary:
-Utility: $300-$400k (Can be stacked)
-State: $100k (Cannot be stacked)
+Incentive Funding Summary:  
+Utility: $300-$400k (Can be stacked)  
+State: $100k (Cannot be stacked)  
 Federal Tax Credits: $0
 
 ---
@@ -182,8 +183,6 @@ If no official source is found, clearly state:
 Always include a URL in your citations and state the domain name of the source used (e.g., "coned.com").
 
 Avoid hallucinations. NEVER assume funding details that are not explicitly stated on eligible sources.
-
-
 `
     });
 
