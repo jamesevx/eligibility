@@ -65,6 +65,7 @@ app.post('/api/evaluate', async (req, res) => {
   try {
     const response = await openai.responses.create({
       model: 'gpt-4o',
+      temperature: 0.7,
       tools: [{ type: 'web_search_preview', search_context_size: "high"}],
       input: `Estimate available EV charging incentives for the following project:
 
@@ -88,11 +89,11 @@ For **utility incentive funding**, you MUST ONLY use data from the **official ut
 ## State Incentive Rule (UPDATED)
 For state-level funding:
 - ✅ Prioritize .gov and .org, state incentive sites (e.g., nyserda.ny.gov), and trusted official sources.
-- ⚠️ If no .gov source is found, you MAY use reputable nonprofit sites (e.g., caletc.org, cleancities.org, calevip.org).
+- ⚠️ If no .gov source is found, **use reputable nonprofit sites .org sites such as (e.g., caletc.org, cleancities.org, calevip.org)**.
 - ❌ Do NOT use blogs, random PDFs, or installer marketing pages.
 
 ## State Tax Credit Rule
-- ✅ Prioritize .gov and .org websites or state agency portals, for example www.tax.ny.gov, and other trusted sources.
+- ✅ Prioritize searching .gov and .org websites or state agency portals for state tax credits, for example www.tax.ny.gov.
 - ❌ Avoid using third party websites if you can.
 ---
 
