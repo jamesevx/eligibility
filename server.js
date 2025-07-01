@@ -95,8 +95,8 @@ If no official or reputable source is found:
 - Clearly state: “State funding not found on official or trusted non-government source.”
 
 ## State Tax Credit Rule
-- ✅ Use .gov, state agency portals (e.g., www.tax.ny.gov), and trusted official sources.
-- ❌ Do NOT use third party websites.
+- ✅ Prioritize .gov and .org websites or state agency portals (e.g., www.tax.ny.gov), and trusted official sources.
+- ❌ Avoid using third party websites if you can.
 ---
 
 ## Evaluation Criteria
