@@ -174,11 +174,11 @@ Federal Tax Credits: $0
 
 ## Final Instruction
 
-Double-check all web search results before using them. If a page is not from the **official utility or a .gov website**, it must not be used for funding estimates.
+Double-check all web search results before using them. If a page is not from the **official utility, .gov, or .org website**, it must not be used for funding estimates.
 
 If no official source is found, clearly state:
 - “No utility incentive funding found on [Utility Name] official website.”
-- “Not found on official .gov website for state incentives.”
+- “Not found on official .gov or .org website for state incentives.”
 
 Always include a URL in your citations and state the domain name of the source used (e.g., "coned.com").
 
