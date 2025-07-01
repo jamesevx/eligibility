@@ -197,7 +197,7 @@ Use this format:
 Source: coned.com | Last updated: March 2025  
 "Applicants must install chargers at publicly accessible sites..."
 
-**State Grant:** $50,000  
+**State Funding:** $50,000  
 Flat incentive. Cannot be combined with utility rebate.  
 Source: nyserda.ny.gov | Last updated: Feb 2025  
 "Cannot be stacked with utility incentives for the same charger..."
@@ -206,13 +206,19 @@ Source: nyserda.ny.gov | Last updated: Feb 2025
 Subject to prevailing wage rules.  
 [IRS 30C Tool](https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experience/?id=dfcab6665ce74efe8cf257aab47ebee1)
 
-3. 📊 Funding Summary Table
+**State Tax Credits:** 50% of elegible costs up to $5000/per port
+Source: https://www.tax.ny.gov/forms/current-forms/ct/ct637i.htm#qualifying-property
 
-| Category           | Amount           | Stackable?     | Status     | Source         |
-|--------------------|------------------|----------------|------------|----------------|
-| Utility            | $150k–$240k      | ❌ No          | Active     | coned.com      |
-| State Grant        | $50k             | ❌ No          | Active     | nyserda.ny.gov |
-| Federal Tax Credit | 30% credit       | ✅ Yes         | Always open| irs.gov        |
+
+3. . **Incentive Funding Summary**
+
+Example:
+
+Incentive Funding Summary:  
+Utility: $300-$400k (Can be stacked)  
+State: $100k (Cannot be stacked)
+State Tax Credits: up to $5000 per port
+Federal Tax Credits: $0
 
 4. 🔗 Citations  
 Each source must include:
