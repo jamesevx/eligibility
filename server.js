@@ -85,7 +85,7 @@ For **utility incentive funding**, you MUST ONLY use data from the **official ut
 ❌ DO NOT USE: 3rd-party aggregators, vendors, blogs, or PDFs unless the URL is clearly from the utility's own domain.  
 ✅ ONLY ACCEPT information from the **utility's official website** for utility funding.  
 
-For **state-level funding**, only use URLs from **.gov** or **.org** or official state program portals.
+For **state-level funding**, try and use URLs from **.gov** or **.org** or official state program portals.
 
 ---
 
@@ -174,7 +174,7 @@ Federal Tax Credits: $0
 
 ## Final Instruction
 
-Double-check all web search results before using them. If a page is not from the **official utility, .gov, or .org website**, it must not be used for funding estimates.
+Double-check all web search results before using them. For Utility funding, if a page is not from the **official utility website**, it must not be used for funding estimates. For state funding, try and use funding found on **official .gov or .org websites**
 
 If no official source is found, clearly state:
 - “No utility incentive funding found on [Utility Name] official website.”
