@@ -167,13 +167,17 @@ Example format:
 **Federal Tax Credits:** $0  
 *IRS 30C eligibility info here...*
 
+**State Tax Credits:** $5000
+*State Tax Credit explanation*
+
 3. **Incentive Funding Summary**
 
 Example:
 
 Incentive Funding Summary:  
 Utility: $300-$400k (Can be stacked)  
-State: $100k (Cannot be stacked)  
+State: $100k (Cannot be stacked)
+State Tax Credits: up to $5000 per port
 Federal Tax Credits: $0
 
 ---
