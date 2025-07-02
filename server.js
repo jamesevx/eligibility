@@ -221,11 +221,11 @@ Source: https://www.tax.ny.gov/forms/current-forms/ct/ct637i.htm#qualifying-prop
 
 
 3. . **Incentive Funding Summary**
-
+- **ALWAYS DISPLAY THE ESTIMATES FOR STATE/UTILITY FUNDING IN A RANGE. FOR EXAMPLE: IF YOU BELIEVE THE UTILITY FUNDING AMOUNT FOR THE CUSTOMER IS $300k, SHOW $300k-425k for example. SEE THE INCENTIVE FUNDING SUMMARY EXAMPLE BELOW**
 Example:
 
 Incentive Funding Summary:  
-Utility: $300-$400k (Can be stacked)  
+Utility: $300-$425k (Can be stacked)  
 State: $100k (Cannot be stacked)
 State Tax Credits: up to $5000 per port
 Federal Tax Credits: $0
