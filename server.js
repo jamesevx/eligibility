@@ -111,7 +111,7 @@ Follow the research rules for these and any additional searches.
 For any computed estimate **X**:  
 • *Lower*  = round(X × 0.75, −3)   // nearest $1 000  
 • *Upper*  = round(X × 1.25, −3)  
-Display ranges as **$${Lower/1000}k–$${Upper/1000}k**.  
+Display ranges as **$\${Lower/1000}k–$\${Upper/1000}k**.  
 *Example*: 120 000 → **$90k–$150k**
 
 ---
