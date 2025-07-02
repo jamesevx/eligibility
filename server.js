@@ -34,6 +34,17 @@ function todayLong() {
   );  // → "July 2, 2025"
 }
 
+// -------------------- State Abbreviation → Full Name --------------------
+const stateMap = {
+  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana', ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan', MN: 'Minnesota',MS: 'Mississippi', MO: 'Missouri',MT: 'Montana', NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey', NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah', VT: 'Vermont',
+  VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming', DC: 'District of Columbia'
+};
+
+// Helper: return full state name, or the original input if not found
+function getFullStateName(abbr = '') {
+  return stateMap[abbr.toUpperCase()] || abbr;
+}
+
 // Format form data into natural project description
 function formatProjectDescription(formData) {
   const {
@@ -102,7 +113,7 @@ Issue *at least* these three searches (add more as needed):
 1. "${formData.utilityProvider} ${formData.chargerType} EV charger rebates ${extractState(formData.siteAddress)} ${todayLong()}"
 2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives ${todayLong()}"
 3. "${formData.chargerType} rebates ${extractState(formData.siteAddress)} ${todayLong()}"
-4. "${extractState(formData.siteAddress)} EV charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
+4. "${getFullStateName(extractState(formData.siteAddress))} EV charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
 
 Follow the research rules for these and any additional searches.
 
@@ -137,6 +148,13 @@ Do **not** apply this rule to statutory percentage credits (e.g., “30 % of eli
  • Blogs, third-party aggregators, vendor marketing pages  
  • PDFs not hosted on allowed domains  
  → If data comes from a non-official source, mark: “Not found on official source.”
+
+---
+### STATE PROGRAM CHECK
+If your first pass finds no state-level incentives, perform an extra search:
+  "${getFullStateName(extractState(formData.siteAddress))} EV charging incentives ${formData.chargerType}"
+If still none are found, state “Not found on official source” in the output
+but keep the section in place.
 
 ---
 
