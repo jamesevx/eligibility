@@ -101,7 +101,8 @@ Issue *at least* these three searches (add more as needed):
 
 1. "${formData.utilityProvider} ${formData.chargerType} EV charger rebates ${extractState(formData.siteAddress)} ${todayLong()}"
 2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives ${todayLong()}"
-3. "${formData.chargerType} make-ready infrastructure rebates ${extractState(formData.siteAddress)} ${todayLong()}"
+3. "${formData.chargerType} rebates ${extractState(formData.siteAddress)} ${todayLong()}"
+4. "${extractState(formData.siteAddress)} EV charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
 
 Follow the research rules for these and any additional searches.
 
@@ -114,6 +115,8 @@ For any computed estimate **X**:
 Display ranges as **$\${Lower/1000}k–$\${Upper/1000}k**.  
 *Example*: 120 000 → **$90k–$150k**
 
+**Exception:**  
+Do **not** apply this rule to statutory percentage credits (e.g., “30 % of eligible costs, up to $100 000 per charger” under IRS 30C). Leave those figures unchanged.
 ---
 
 ### INPUT FORMAT
@@ -134,6 +137,13 @@ Display ranges as **$\${Lower/1000}k–$\${Upper/1000}k**.
  • Blogs, third-party aggregators, vendor marketing pages  
  • PDFs not hosted on allowed domains  
  → If data comes from a non-official source, mark: “Not found on official source.”
+
+---
+
+### RECENCY RULE
+Only cite documents that list a “last updated,” “revised,” or publication date **within the last 18 months**.  
+If no date exists, prefer the newest URL (e.g., 2025-, 2024-).  
+If two versions conflict, cite both and keep the newer one for calculations.
 
 ---
 
