@@ -110,10 +110,10 @@ When sources conflict, cite the lower officially published amount.
 ## Web Search Instructions
 Issue *at least* these three searches (add more as needed):
 
-1. "${formData.utilityProvider} ${formData.chargerType} EV charger rebates ${extractState(formData.siteAddress)} ${todayLong()}"
-2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives ${todayLong()}"
-3. "${formData.chargerType} rebates ${extractState(formData.siteAddress)} ${todayLong()}"
-4. "${getFullStateName(extractState(formData.siteAddress))} EV charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
+1. "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} charging ${formData.vehicleType} in ${extractState(formData.siteAddress)} ${todayLong()}"
+2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives and rebates ${todayLong()}"
+3. "${formData.chargerType} rebates ${getFullStateName(extractState(formData.siteAddress))} ${todayLong()}"
+4. "${getFullStateName(extractState(formData.siteAddress))} ${formData.chargerType} charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
 
 Follow the research rules for these and any additional searches.
 
