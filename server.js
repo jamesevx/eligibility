@@ -62,11 +62,11 @@ function formatProjectDescription(formData) {
   } = formData;
 
   const chargerStr = numChargers && chargerKW
-    ? `${numChargers} ${chargerType || ''} chargers rated at ${chargerKW} kW each`
+    ? `${numChargers} ${chargerType || ''} chargers rated at ${chargerKW} kW each,`
     : '';
 
   const portStr = numPorts && portKW
-    ? `with ${numPorts} ports delivering up to ${portKW} kW each`
+    ? `with ${numPorts} total ports delivering up to ${portKW} kW per port`
     : '';
 
   const dacStr = disadvantagedCommunity === 'Yes'
@@ -113,7 +113,7 @@ Issue *at least* these three searches (add more as needed):
 1. "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} charging ${formData.vehicleType} in ${extractState(formData.siteAddress)} ${todayLong()}"
 2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives and rebates ${todayLong()}"
 3. "${formData.chargerType} rebates ${getFullStateName(extractState(formData.siteAddress))} ${todayLong()}"
-4. "${getFullStateName(extractState(formData.siteAddress))} ${formData.chargerType} charger rebate program available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
+4. "${getFullStateName(extractState(formData.siteAddress))} ${formData.chargerType} charger rebate programs available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
 
 Follow the research rules for these and any additional searches.
 
@@ -219,7 +219,7 @@ Link: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experien
 
 ## OUTPUT FORMAT (Client-Ready)
 
-1. 📍 **Project Summary** – brief, plain-language snapshot.  
+1. 📍 **Project Summary** – brief, plain-language snapshot using: ${formattedInput}.  
 
 2. 💰 **Funding Estimate (By Source)**  
    *Example template (use RANGE RULE):*  
