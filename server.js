@@ -141,14 +141,14 @@ Do **not** apply this rule to statutory percentage credits (e.g., “30 % of eli
 
 ### RESEARCH RULES
 ✅ Allowed Sources  
- • Utility incentives: official utility domains (coned.com, sce.com, ladwp.com, etc.)  
+ • Utility incentives: only official utility domains matching ${formData.utilityProvider} (examples: coned.com, sce.com, ladwp.com, etc.)  
  • State/local funding: *.gov* or trusted *.org* portals  
  • Federal programs: IRS, DOE, FHWA, FHWA, etc.  
  • Private: foundation or verified clean-energy organizations (e.g., Bloomberg, CALSTART)
 
 ❌ Forbidden Sources  
- • Blogs, third-party aggregators, vendor marketing pages  
- • PDFs not hosted on allowed domains  
+ • Blogs, third-party aggregator websites, vendor marketing pages  
+ • PDFs not hosted on allowed domains as outlined in allowed sources  
  → If data comes from a non-official source, mark: “Not found on official source.”
 
 ---
@@ -253,7 +253,7 @@ Link: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experien
 
 ### FINAL VALIDATION (perform before responding)
 • Confirm **every** dollar value is a range following RANGE RULE.  
-• Ensure each range cites an allowed domain.  
+• Ensure each range ius cited from an allowed domain outlined in the RESEARCH RULES.  
 • If any violations exist, fix them before sending the answer.
 
 Avoid hallucinations. NEVER assume funding details not on official sources.
