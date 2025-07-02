@@ -16,6 +16,24 @@ function extractState(address = '') {
   return match ? match[1] : '';
 }
 
+// 🌟 NEW: Extract city (text between first and second commas)
+function extractCity(address = '') {
+  // Matches ", Los Angeles, CA"
+  const match = address.match(/,\s*([^,]+),\s*[A-Z]{2}\s*\d{5}/);
+  return match ? match[1].trim() : '';
+}
+
+function todayLong() {
+  return new Date().toLocaleDateString(
+    'en-US',                       // locale
+    { year: 'numeric',
+      month: 'long',               // “July”
+      day: 'numeric',              // “2”
+      timeZone: 'America/New_York' // keep it in your server’s TZ
+    }
+  );  // → "July 2, 2025"
+}
+
 // Format form data into natural project description
 function formatProjectDescription(formData) {
   const {
@@ -83,7 +101,8 @@ You MUST follow all instructions and constraints below exactly.
 You must include the following phrases in your web search:
 
 - "${formData.usageType} ${formData.utilityProvider} EV charger rebates for ${formData.chargerType} charging ${formData.vehicleType} in ${extractState(formData.siteAddress)}"
-- "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)}"
+- "${formData.usageType} EV charging incentives and rebates for ${formData.chargerType} in ${extractState(formData.siteAddress)} availavble as of ${todayLong()}"
+- "${formData.usageType} ${formData.chargerType} EV charging rebates in ${extractCity(formData.siteAddress)} availavble as of ${todayLong()}"
 
 Make sure to follow the research rules for the above searches and any others you choose to make.
 
@@ -101,7 +120,7 @@ RESEARCH RULES
 
 ✅ Allowed Sources:
 - Utility Incentives: Only official utility websites (e.g., coned.com, sce.com)
-- State/Local Funding: Only .gov or official energy portals
+- State/Local Funding: Only .gov and .org websites, or official energy portals
 - Federal Programs: Use IRS, DOE, FHWA, or other trusted federal domains
 - Private Incentives: Only programs hosted by foundations or verified clean energy partners (e.g., Bloomberg, Calstart)
 
@@ -125,12 +144,7 @@ ELIGIBILITY CRITERIA TO MATCH
 - Networked vs non-networked
 - Zoning or transportation proximity (optional)
 
-- Use **exact multiplier math** when internet content provides:
-  - $ per port
-  - $ per charger
-  - $ per kW
 
-  *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
 
 - If you are not 100% certain what funding amount the customer qualifies for, provide a funding range (e.g., $55k–$68.75k).
 - For each funding category, categorize the funding amounts by funding available for chargers or for make-ready/infrastructure costs.
@@ -141,7 +155,13 @@ ELIGIBILITY CRITERIA TO MATCH
 
 CALCULATION RULES
 
-- Use exact math when available (e.g., 6 ports × $55,000/port = $330,000)
+- Use **exact multiplier math** when internet content provides:
+  - $ per port
+  - $ per charger
+  - $ per kW
+
+  *(e.g., 6 ports × $68,750 if DAC and 240kW output)*
+  
 - Provide conservative estimates when eligibility is uncertain
 - Only include funding over $1,000
 - Collapse all program tiers and adders into a single total range
@@ -221,7 +241,12 @@ Source: https://www.tax.ny.gov/forms/current-forms/ct/ct637i.htm#qualifying-prop
 
 
 3. . **Incentive Funding Summary**
-- **ALWAYS DISPLAY THE ESTIMATES FOR STATE/UTILITY FUNDING IN A RANGE. FOR EXAMPLE: IF YOU BELIEVE THE UTILITY FUNDING AMOUNT FOR THE CUSTOMER IS $300k, SHOW $300k-425k for example. SEE THE INCENTIVE FUNDING SUMMARY EXAMPLE BELOW**
+
+**Incentive Funding summary rules**
+- Always display in the formate shown in the example below
+- For Utility Funding summary estimate, always show a funding range based around the value you calculated above. We MUST do this to account for a 25-30% margin of error above and below your funding estimate. Follow the example shown below.
+- For State Funding summary estimate, always show a funding range based around the value you calculated above. We MUST do this to account for a 25-30% margin of error above and below your funding estimate. Follow the example shown below.
+
 Example:
 
 Incentive Funding Summary:  
