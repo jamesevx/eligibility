@@ -114,6 +114,8 @@ Issue *at least* these three searches (add more as needed):
 2. "${extractCity(formData.siteAddress)} ${extractState(formData.siteAddress)} public ${formData.chargerType} charging incentives and rebates ${todayLong()}"
 3. "${formData.chargerType} rebates ${getFullStateName(extractState(formData.siteAddress))} ${todayLong()}"
 4. "${getFullStateName(extractState(formData.siteAddress))} ${formData.chargerType} charger rebate programs available in ${extractCity(formData.siteAddress)} site:.gov OR site:.org ${todayLong()}"
+5. "${formData.utilityProvider} ${formData.usageType} ${formData.chargerType} rebate incentive chart pdf site:${formData.utilityProvider.split(' ')[0].toLowerCase()}* ${todayLong()}"
+6. "${formData.utilityProvider} ${formData.usageType} ${formData.chargerType} rebate program guide pdf site:${formData.utilityProvider.split(' ')[0].toLowerCase()}* ${todayLong()}"
 
 Follow the research rules for these and any additional searches.
 
@@ -204,6 +206,7 @@ Link: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experien
 
 ### DOCUMENT PARSING
 • Read every PDF fully; quote key terms with section refs.  
+• When a utility landing page references an “Incentive Chart,” “Program Brochure,” or similar PDF, open it and parse dollar caps before concluding no numeric data exists
 • When data conflicts, cite both but adopt the lower confirmed amount.  
 • Never assume which doc is more accurate without proof.
 
