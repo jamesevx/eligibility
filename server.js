@@ -151,12 +151,15 @@ Do **not** apply this rule to statutory percentage credits (e.g., “30 % of eli
  • PDFs not hosted on allowed domains as outlined in allowed sources  
  → If data comes from a non-official source, mark: “Not found on official source.”
 
+Open program validaiton:
+• Make sure all funding options you are referncing are up to date and live, we need ot make sure funding is open and they are accepting new applications.
+• If a program mentions that it is closed, look for new programs that are accepting applications by running new web searches. 
 ---
 ### STATE PROGRAM CHECK
 If your first pass finds no state-level incentives, perform an extra search:
-  "${getFullStateName(extractState(formData.siteAddress))} EV charging incentives ${formData.chargerType}"
-If still none are found, state “Not found on official source” in the output
-but keep the section in place.
+  "${getFullStateName(extractState(formData.siteAddress))} EV charging incentives for ${formData.chargerType}"
+Make sure to follow the research rules.
+If still none are found, state “Not found on official source” in the output but keep the section in place.
 
 ---
 
@@ -255,6 +258,7 @@ Link: https://mtgis-portal.geo.census.gov/arcgis/apps/experiencebuilder/experien
 • Confirm **every** dollar value is a range following RANGE RULE.  
 • Ensure each range ius cited from an allowed domain outlined in the RESEARCH RULES.  
 • If any violations exist, fix them before sending the answer.
+• Check that all funding options are still open and accepting applications.
 
 Avoid hallucinations. NEVER assume funding details not on official sources.
 `
